@@ -1,0 +1,75 @@
+CREATE TABLE IF NOT EXISTS categories(
+
+	"categoryID" INTEGER UNIQUE NOT NULL,
+	"categoryName" TEXT,
+	"description" TEXT,
+	PRIMARY KEY ("categoryID")
+);
+
+CREATE TABLE IF NOT EXISTS employees(
+
+	"employeeID" INTEGER UNIQUE NOT NULL,
+	"employeeName" TEXT,
+	"title" TEXT,
+	"city" TEXT,
+	"country" TEXT,
+	"reportsTo" INTEGER,
+	PRIMARY KEY ("employeeID")
+);
+
+CREATE TABLE IF NOT EXISTS customers (
+
+	"customerID" TEXT UNIQUE NOT NULL,
+	"companyName" TEXT,
+	"contactName" TEXT,
+	"contactTitle" TEXT,
+	"city" TEXT,
+	"country" TEXT,
+	PRIMARY KEY ("customerID")
+);
+
+CREATE TABLE IF NOT EXISTS shippers (
+
+	"shippersID" INTEGER UNIQUE NOT NULL,
+	"companyName" TEXT,
+	PRIMARY KEY ("shippersID")
+);
+
+CREATE TABLE IF NOT EXISTS products (
+
+	"productID" INTEGER UNIQUE NOT NULL,
+	"productName" TEXT,
+	"quantityPerUnit" TEXT,
+	"unitPrice" NUMERIC,
+	"discontinued" INTEGER,
+	"categoryID" INTEGER,
+	PRIMARY KEY ("productID"),
+	FOREIGN KEY ("categoryID") REFERENCES categories("categoryID")
+);
+
+CREATE TABLE IF NOT EXISTS orders(
+
+	"orderID" INTEGER UNIQUE NOT NULL,
+	"customerID" TEXT,
+	"employeeID" INTEGER,
+	"orderDate" DATE,
+	"requiredDate" DATE,
+	"shippedDate" DATE,
+	"shippersID" INTEGER,
+	"freight" NUMERIC,
+	PRIMARY KEY ("orderID"),
+	FOREIGN KEY ("customerID") REFERENCES customers("customerID"),
+	FOREIGN KEY ("employeeID") REFERENCES employees("employeeID"),
+	FOREIGN KEY ("shippersID") REFERENCES shippers("shippersID")
+);
+
+CREATE TABLE IF NOT EXISTS order_details (
+
+	"orderID" INTEGER,
+	"productID" INTEGER,
+	"unitPrice" NUMERIC,
+	"quantity" NUMERIC,
+	"discount" NUMERIC,
+	FOREIGN KEY ("orderID") REFERENCES orders("orderID"),
+	FOREIGN KEY ("productID") REFERENCES products("productID")
+);
